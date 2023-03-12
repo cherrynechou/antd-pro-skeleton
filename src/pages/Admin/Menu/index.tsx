@@ -1,6 +1,7 @@
 import {
   useRef,
-  useState
+  useState,
+  useEffect
 } from "react";
 import type {
   ActionType,
@@ -20,6 +21,8 @@ import {
 } from '@/services/admin/auth/menu';
 import Icon, { PlusOutlined } from "@ant-design/icons";
 import * as icons from '@ant-design/icons';
+import CreateOrEdit from './components/CreateOrEdit'
+
 
 export type TableListItem = {
   id: number;
@@ -43,6 +46,16 @@ export default () =>{
 
   const actionRef = useRef<ActionType>();
 
+  const fetchApi = () =>{
+
+  };
+
+
+  useEffect(async ()=>{
+    fetchApi();
+  },[]);
+
+
   //自定查询
   const requestData = async () =>{
     const ret = await queryMenus();
@@ -52,6 +65,13 @@ export default () =>{
       success: ret.status === 200
     }
   }
+
+
+  const showCreateModal = () =>{
+
+  }
+
+
 
 
   //列表
@@ -109,7 +129,7 @@ export default () =>{
       hideInSearch: true,
     }, {
       title: '操作',
-      width: 180,
+      width: 80,
       key: 'option',
       valueType: 'option',
       align: 'center',
@@ -121,6 +141,8 @@ export default () =>{
       ],
     },
   ];
+
+
   return (
     <PageContainer title="菜单管理">
       <ProTable<TableListItem>
@@ -134,7 +156,7 @@ export default () =>{
         rowSelection={{ fixed: true }}
         pagination={false}
         toolBarRender={() => [
-          <Button type="primary">
+          <Button type="primary" icon={<PlusOutlined />} onClick={showCreateModal}>
             新增
           </Button>,
         ]}

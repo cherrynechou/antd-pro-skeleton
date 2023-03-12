@@ -11,13 +11,6 @@ export function queryRoles(params: any = {}) {
 }
 
 /**
- * 所有角色列表
- */
-export function queryAllRoles() {
-  return request.get('/admin/auth/role/all');
-}
-
-/**
  * 添加角色
  * @param params
  */
@@ -40,4 +33,11 @@ export function getRole(id: number){
  */
 export function updateRole(id: number,params: any={}){
   return request.put(`/admin/auth/roles/${id}`, params);
+}
+
+/**
+ * 所有角色列表
+ */
+export function queryAllRoles() {
+  return request.get('/admin/role/all');
 }

@@ -22,6 +22,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import {
   queryPermissions
 } from "@/services/admin/auth/permission";
+import CreateOrEdit from './components/CreateOrEdit'
+
 export type TableListItem = {
   id: number;
   name: string;
@@ -110,7 +112,7 @@ export default () =>{
       hideInSearch: true,
     }, {
       title: '操作',
-      width: 180,
+      width: 60,
       key: 'option',
       valueType: 'option',
       align: 'center',
@@ -142,6 +144,10 @@ export default () =>{
         ]}
       >
       </ProTable>
+
+      <CreateOrEdit
+      />
+
     </PageContainer>
   )
 }

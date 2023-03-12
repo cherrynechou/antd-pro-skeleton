@@ -47,7 +47,7 @@ export function updateUser(id: number,params: any= {}) {
  * 禁用用户登录
  */
 export function blockUser(id: number) {
-  return request.patch(`/admin/auth/user/${id}/block`);
+  return request.patch(`/admin/user/${id}/block`);
 }
 
 /**
@@ -55,5 +55,5 @@ export function blockUser(id: number) {
  * @param id
  */
 export function resetPassword(id: number){
-  return request.patch(`/admin/auth/user/${id}/resetPassword`);
+  return request.patch(`/admin/user/${id}/resetPassword`);
 }

@@ -15,6 +15,7 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { queryRoles } from "@/services/admin/auth/role";
 import _ from "lodash";
+import CreateOrEdit from './components/CreateOrEdit'
 
 export type TableListItem = {
   id: number;
@@ -85,7 +86,7 @@ export default () =>{
       hideInSearch: true,
     }, {
       title: '操作',
-      width: 180,
+      width: 40,
       key: 'option',
       valueType: 'option',
       align: 'center',

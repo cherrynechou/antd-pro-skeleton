@@ -14,14 +14,18 @@ import {
   Button,
   Space,
   Tag,
+  message,
   Switch,
   Popconfirm
 } from 'antd';
 import {
   queryUsers,
+  blockUser,
+  resetPassword
 } from '@/services/admin/auth/user';
 import _ from 'lodash';
 import { PlusOutlined } from '@ant-design/icons';
+import CreateOrEdit from './components/CreateOrEdit'
 
 export type TableListItem = {
   id: number;
@@ -46,19 +50,19 @@ export type RoleItem = {
 
 export default () =>{
 
+  const [ isModalVisible, setIsModalVisible ] = useState(false);
+  const [ editId, setEditId] = useState<number>(0);
+
   const actionRef = useRef<ActionType>();
 
   //获取用户用户列表
   const requestData = async (params: any) =>{
     const filter = _.omit(params,['current','pageSize']);
-
     const rename = {
       page:params.current,
       pageSize:params.pageSize
     }
     const mergeParams = Object.assign({},filter,rename);
-    console.log(mergeParams);
-
     const ret = await queryUsers(mergeParams);
 
     return {
@@ -67,6 +71,51 @@ export default () =>{
       success: ret.status === 200
     }
   }
+
+  /**
+   * 禁止用户登录
+   * @param uid
+   */
+  const handleBlockUser = async (uid: number) => {
+    const res = await blockUser(uid);
+    if(res.status === 200){
+      message.success("更新成功");
+    }
+  }
+
+  /**
+   *  显示对话框
+   * @param show
+   * @param id
+   */
+  const isShowModal = (show: boolean, id = undefined)=> {
+    console.log(show);
+    console.log(id);
+
+    setEditId(id);
+    setIsModalVisible(show);
+  }
+
+  /**
+   *
+   * @param id
+   */
+  const confirmDel = (id: number) =>{
+
+  }
+
+  /**
+   * 重置密码
+   * @param id
+   */
+  const confirmResetPassword = async (id: number) => {
+    const res = await resetPassword(id);
+    if(res.status === 200){
+      message.success("重置成功");
+    }
+  }
+
+
 
   //列表
   const columns: ProColumns<TableListItem>[] = [
@@ -88,7 +137,7 @@ export default () =>{
       align: 'center',
       dataIndex: 'name',
       hideInSearch: true,
-    },{
+    }, {
       title: '角色',
       width: 80,
       align: 'center',
@@ -124,7 +173,8 @@ export default () =>{
       dataIndex: 'is_black',
       hideInSearch: true,
       render:(_,record)=>(
-        <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked = { record.status === 1 } disabled = { record.is_administrator }/>
+        <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked = { record.status === 1 } disabled = { record.is_administrator }
+                onChange={ ()=> handleBlockUser(record.id)}/>
       )
     }, {
       title: '登录次数',
@@ -146,16 +196,16 @@ export default () =>{
       hideInSearch: true,
     }, {
       title: '操作',
-      width: 180,
+      width: 100,
       key: 'option',
       valueType: 'option',
       align: 'center',
       render: (_,record) => [
-        <a key="link" >编辑</a>,
-        <Popconfirm key="del" placement="top" title='确认操作?'  okText="Yes" cancelText="No">
+        <a key="link" onClick={()=>isShowModal(true, record.id )}>编辑</a>,
+        <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) }  okText="Yes" cancelText="No">
           <a>删除</a>
         </Popconfirm>,
-        <Popconfirm key="reset" placement="top" title='确认操作?' okText="Yes" cancelText="No">
+        <Popconfirm key="reset" placement="top" title='确认操作?' onConfirm={ () => confirmResetPassword(record.id) }  okText="Yes" cancelText="No">
           <a>重置密码</a>
         </Popconfirm>
       ],
@@ -177,12 +227,22 @@ export default () =>{
           onChange: (page) => console.log(page),
         }}
         toolBarRender={() => [
-          <Button type="primary" icon={<PlusOutlined />}  >
+          <Button type="primary" icon={<PlusOutlined />}  onClick={() => isShowModal(true)}>
             新增
           </Button>,
         ]}
       >
       </ProTable>
+
+      {isModalVisible &&
+        <CreateOrEdit
+          isModalVisible={isModalVisible}
+          isShowModal={isShowModal}
+          actionRef = {actionRef}
+          editId = {editId}
+        />
+      }
+
     </PageContainer>
   )
 }

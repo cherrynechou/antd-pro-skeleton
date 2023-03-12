@@ -1,8 +1,7 @@
 import { Button, Result } from 'antd';
-import React from 'react';
 import { history } from 'umi';
 
-const NoFoundPage: React.FC = () => (
+export default () => (
   <Result
     status="403"
     title="403"
@@ -15,4 +14,3 @@ const NoFoundPage: React.FC = () => (
   />
 );
 
-export default NoFoundPage;
