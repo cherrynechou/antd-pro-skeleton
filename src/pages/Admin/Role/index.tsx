@@ -10,12 +10,17 @@ import {
   Button,
   Popconfirm,
   Space,
-  Tag
+  Tag,
+  message
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { queryRoles } from "@/services/admin/auth/role";
+import {
+  queryRoles,
+  destroyRole
+} from "@/services/admin/auth/role";
 import _ from "lodash";
 import CreateOrEdit from './components/CreateOrEdit'
+
 
 export type TableListItem = {
   id: number;
@@ -57,6 +62,18 @@ export default () =>{
     setEditId(id);
     setIsModalVisible(show);
   }
+
+  /**
+   * 删除
+   * @param id
+   */
+  const confirmDel = async (id: number) => {
+    const res = await destroyRole(id);
+    if(res.status === 200){
+      message.success("删除成功");
+    }
+  };
+
 
   const columns: ProColumns<TableListItem>[] = [
     {
@@ -101,12 +118,14 @@ export default () =>{
       key: 'option',
       valueType: 'option',
       align: 'center',
-      render: (_,record) => [
-        <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>,
-        <Popconfirm key="del" placement="top" title='确认操作?' okText="Yes" cancelText="No">
-          <a>删除</a>
-        </Popconfirm>,
-      ],
+      render: (_,record) => (
+        <Space>
+          <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>
+          <Popconfirm key="del" placement="top" title='确认操作?' okText="Yes" cancelText="No" onConfirm={ () => confirmDel(record.id) }>
+            <a>删除</a>
+          </Popconfirm>
+        </Space>
+      )
     },
   ];
 
@@ -140,8 +159,6 @@ export default () =>{
           editId = {editId}
         />
       }
-
-
     </PageContainer>
   )
 }

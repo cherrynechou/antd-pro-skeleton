@@ -20,7 +20,8 @@ import {
 import { v4 as uuid } from 'uuid';
 import { PlusOutlined } from "@ant-design/icons";
 import {
-  queryPermissions
+  queryPermissions,
+  destroyPermission
 } from "@/services/admin/auth/permission";
 import CreateOrEdit from './components/CreateOrEdit'
 
@@ -64,6 +65,17 @@ export default () =>{
     setEditId(id);
     setIsModalVisible(show);
   }
+
+  /**
+   * 删除id
+   * @param id
+   */
+  const confirmDel = async (id: number) => {
+    const res = await destroyPermission(id);
+    if(res.status === 200){
+      message.success("删除成功");
+    }
+  };
 
   //列表
   const columns: ProColumns<TableListItem>[] = [
@@ -127,12 +139,14 @@ export default () =>{
       key: 'option',
       valueType: 'option',
       align: 'center',
-      render: (_,record) => [
-        <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>,
-        <Popconfirm key="del" placement="top" title='确认操作?' okText="Yes" cancelText="No">
-          <a>删除</a>
-        </Popconfirm>,
-      ],
+      render: (_,record) => (
+        <Space>
+          <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>
+          <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) } okText="Yes" cancelText="No">
+            <a>删除</a>
+          </Popconfirm>
+        </Space>
+      )
     },
   ];
 

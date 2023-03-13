@@ -32,7 +32,6 @@ export default (props: any) =>{
 
   const [ form ] = Form.useForm();
 
-
   const fetchApi = async () =>{
 
     const permissionAllRes = await queryAllPermissions();
@@ -98,7 +97,7 @@ export default (props: any) =>{
 
   return (
     <Modal title={title}
-       bodyStyle={{'height':'calc(100vh - 500px)','overflowY':'auto'}}
+       bodyStyle={{'height':'calc(100vh - 400px)','overflowY':'auto'}}
        open={isModalVisible}
        onOk={handleOk}
        onCancel={()=>isShowModal(false)}

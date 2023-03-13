@@ -19,8 +19,16 @@ export function createMenu(params: any = {}) {
  * 获取当前菜单
  * @param id
  */
-export function getMenu(id: string) {
+export function getMenu(id: number) {
   return request.get(`/admin/auth/menu/${id}`);
+}
+
+/**
+ * 删除菜单
+ * @param id
+ */
+export function destroyMenu(id: number) {
+  return request.delete(`/admin/auth/menu/${id}`);
 }
 
 /**

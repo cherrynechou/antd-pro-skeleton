@@ -14,11 +14,13 @@ import {
   Button,
   Popconfirm,
   Switch,
-  message
+  message,
+  Space
 } from "antd";
 import {
   queryMenus,
-  switchMenu
+  switchMenu,
+  destroyMenu
 } from '@/services/admin/auth/menu';
 import Icon, { PlusOutlined } from "@ant-design/icons";
 import * as icons from '@ant-design/icons';
@@ -70,8 +72,15 @@ export default () =>{
     setIsModalVisible(show);
   }
 
-  const confirmDel = (id: number) => {
-
+  /**
+   * 删除id
+   * @param id
+   */
+  const confirmDel = async (id: number) => {
+    const res = await destroyMenu(id);
+    if(res.status === 200){
+      message.success("删除成功");
+    }
   }
 
   const handleSwitch = async (id: number) =>{
@@ -141,12 +150,14 @@ export default () =>{
       key: 'option',
       valueType: 'option',
       align: 'center',
-      render: (_,record) => [
-        <a key="link" onClick={() => isShowModal(true, record.id)}>编辑</a>,
-        <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) } okText="Yes" cancelText="No">
-          <a>删除</a>
-        </Popconfirm>,
-      ],
+      render: (_,record) => (
+        <Space>
+          <a key="link" onClick={() => isShowModal(true, record.id)}>编辑</a>
+          <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) } okText="Yes" cancelText="No">
+            <a>删除</a>
+          </Popconfirm>
+        </Space>
+      )
     },
   ];
 

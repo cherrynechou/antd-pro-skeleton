@@ -30,7 +30,7 @@ export function createUser(params: any = {}){
  * 当前查询用户
  * @param id
  */
-export function getUser(id: string){
+export function getUser(id: number){
   return request.get(`/admin/auth/users/${id}`);
 }
 
@@ -41,6 +41,14 @@ export function getUser(id: string){
  */
 export function updateUser(id: number,params: any= {}) {
   return request.put(`/admin/auth/users/${id}`,params);
+}
+
+/**
+ * 删除用户
+ * @param id
+ */
+export function destroyUser(id: number){
+  return request.delete(`/admin/auth/user/${id}`);
 }
 
 /**

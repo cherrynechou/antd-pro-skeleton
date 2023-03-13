@@ -35,6 +35,15 @@ export function updateRole(id: number,params: any={}){
   return request.put(`/admin/auth/roles/${id}`, params);
 }
 
+
+/**
+ * 删除角色
+ * @param id
+ */
+export function destroyRole(id: number){
+  return request.delete(`/admin/auth/roles/${id}`);
+}
+
 /**
  * 所有角色列表
  */

@@ -196,50 +196,75 @@ export default (props: any) =>{
               </Upload>
             </Form.Item>
 
-            <Form.Item
-              name="password"
-              label="密码"
-              rules={[
-                {
-                  required: true,
-                  message: '密码不能为空！',
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (value.length>=6) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('密码长度至少6位!'));
-                  },
-                }),
-              ]}
-              hasFeedback
-            >
-              <Input.Password />
-            </Form.Item>
+            {/*添加*/}
+            {editId === undefined &&
+              <>
+                <Form.Item
+                  name="password"
+                  label="密码"
+                  rules={[
+                    {
+                      required: true,
+                      message: '密码不能为空！',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (value.length>=6) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('密码长度至少6位!'));
+                      },
+                    }),
+                  ]}
+                  hasFeedback
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  name="confirm"
+                  label="确认密码"
+                  dependencies={['password']}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: '请确认你的密码！',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('输入的密码不匹配!'));
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password />
+                </Form.Item>
+              </>
+            }
 
-            <Form.Item
-              name="confirm"
-              label="确认密码"
-              dependencies={['password']}
-              hasFeedback
-              rules={[
-                {
-                  required: true,
-                  message: '请确认你的密码！',
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('输入的密码不匹配!'));
-                  },
-                }),
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
+            {/*编辑*/}
+            {editId !== undefined &&
+              <>
+                <Form.Item
+                  name="password"
+                  label="密码"
+                  hasFeedback
+                >
+                  <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  name="confirm"
+                  label="确认密码"
+                  dependencies={['password']}
+                  hasFeedback
+                >
+                  <Input.Password />
+                </Form.Item>
+              </>
+            }
 
             <Form.Item
               name="roles"

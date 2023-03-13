@@ -21,7 +21,8 @@ import {
 import {
   queryUsers,
   blockUser,
-  resetPassword
+  resetPassword,
+  destroyUser
 } from '@/services/admin/auth/user';
 import _ from 'lodash';
 import { PlusOutlined } from '@ant-design/icons';
@@ -97,8 +98,11 @@ export default () =>{
    *
    * @param id
    */
-  const confirmDel = (id: number) =>{
-
+  const confirmDel = async (id: number) =>{
+    const res = await destroyUser(id);
+    if(res.status === 200){
+      message.success("删除成功");
+    }
   }
 
   /**
@@ -111,8 +115,6 @@ export default () =>{
       message.success("重置成功");
     }
   }
-
-
 
   //列表
   const columns: ProColumns<TableListItem>[] = [
@@ -197,15 +199,19 @@ export default () =>{
       key: 'option',
       valueType: 'option',
       align: 'center',
-      render: (_,record) => [
-        <a key="link" onClick={()=>isShowModal(true, record.id )}>编辑</a>,
-        <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) }  okText="Yes" cancelText="No">
-          <a>删除</a>
-        </Popconfirm>,
-        <Popconfirm key="reset" placement="top" title='确认操作?' onConfirm={ () => confirmResetPassword(record.id) }  okText="Yes" cancelText="No">
-          <a>重置密码</a>
-        </Popconfirm>
-      ],
+      render: (_,record) => (
+        <Space>
+          <a key="link" onClick={()=>isShowModal(true, record.id )}>编辑</a>
+          {!record.is_administrator &&
+            <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) }  okText="Yes" cancelText="No">
+              <a>删除</a>
+            </Popconfirm>
+          }
+          <Popconfirm key="reset" placement="top" title='确认操作?' onConfirm={ () => confirmResetPassword(record.id) }  okText="Yes" cancelText="No">
+            <a>重置密码</a>
+          </Popconfirm>
+        </Space>
+      )
     },
   ];
 

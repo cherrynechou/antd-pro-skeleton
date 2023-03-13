@@ -33,6 +33,15 @@ export function updatePermission(id: number,params: any = {}){
 }
 
 /**
+ * 删除权限
+ * @param id
+ */
+export function destroyPermission(id: number)
+{
+  return request.delete(`admin/auth/permissions/${id}`);
+}
+
+/**
  * 生成权限列表
  */
 export function queryAllPermissions() {

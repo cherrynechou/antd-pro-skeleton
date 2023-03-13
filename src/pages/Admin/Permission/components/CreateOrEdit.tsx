@@ -28,7 +28,7 @@ export default (props: any) =>{
 
   const [ form ] = Form.useForm();
 
-  const { isModalVisible, isShowModal, permissionTreeData, editId } = props;
+  const { isModalVisible, isShowModal, permissionTreeData, editId ,actionRef } = props;
 
 
   const fetchApi = async () =>{
@@ -90,6 +90,7 @@ export default (props: any) =>{
     const response = await updatePermission(editId, fieldsValue);
     if(response.status === 200){
       isShowModal(false);
+      actionRef.current.reload();
       message.success('修改成功');
     }
   }
