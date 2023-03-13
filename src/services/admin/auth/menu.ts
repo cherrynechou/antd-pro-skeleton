@@ -37,5 +37,5 @@ export function updateMenu(id: string, params: any = {}) {
  * @param id
  */
 export function switchMenu(id: number){
-  return request.patch(`/admin/auth/menu/${id}/switch`);
+  return request.patch(`/admin/menu/${id}/switch`);
 }

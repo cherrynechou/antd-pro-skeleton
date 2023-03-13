@@ -1,7 +1,6 @@
 import {
   useRef,
-  useState,
-  useEffect
+  useState
 } from "react";
 import type {
   ActionType,
@@ -14,10 +13,12 @@ import {
 import {
   Button,
   Popconfirm,
-  Switch
+  Switch,
+  message
 } from "antd";
 import {
-  queryMenus
+  queryMenus,
+  switchMenu
 } from '@/services/admin/auth/menu';
 import Icon, { PlusOutlined } from "@ant-design/icons";
 import * as icons from '@ant-design/icons';
@@ -43,18 +44,10 @@ export type TableListItem = {
 export default () =>{
 
   const [ menuData, setMenuData ] = useState([]);
+  const [ isModalVisible, setIsModalVisible ] = useState(false);
+  const [ editId, setEditId] = useState<number>(0);
 
   const actionRef = useRef<ActionType>();
-
-  const fetchApi = () =>{
-
-  };
-
-
-  useEffect(async ()=>{
-    fetchApi();
-  },[]);
-
 
   //自定查询
   const requestData = async () =>{
@@ -67,12 +60,27 @@ export default () =>{
   }
 
 
-  const showCreateModal = () =>{
+  /**
+   *  显示对话框
+   * @param show
+   * @param id
+   */
+  const isShowModal = (show: boolean, id = undefined)=> {
+    setEditId(id);
+    setIsModalVisible(show);
+  }
+
+  const confirmDel = (id: number) => {
 
   }
 
-
-
+  const handleSwitch = async (id: number) =>{
+    const response = await switchMenu(id);
+    if(response.status === 200){
+      message.success("更新成功");
+      actionRef.current?.reload();
+    }
+  }
 
   //列表
   const columns: ProColumns<TableListItem>[] = [
@@ -113,7 +121,7 @@ export default () =>{
       dataIndex: 'status',
       hideInSearch: true,
       render:(_,record)=>(
-        <Switch checkedChildren="开启" unCheckedChildren="关闭"  defaultChecked= { record.status === 1 }/>
+        <Switch checkedChildren="开启" unCheckedChildren="关闭"  defaultChecked= { record.status === 1 } onChange={() => handleSwitch(record.id)}/>
       )
     }, {
       title: '创建时间',
@@ -134,7 +142,7 @@ export default () =>{
       valueType: 'option',
       align: 'center',
       render: (_,record) => [
-        <a key="link" >编辑</a>,
+        <a key="link" onClick={() => isShowModal(true, record.id)}>编辑</a>,
         <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) } okText="Yes" cancelText="No">
           <a>删除</a>
         </Popconfirm>,
@@ -156,12 +164,22 @@ export default () =>{
         rowSelection={{ fixed: true }}
         pagination={false}
         toolBarRender={() => [
-          <Button type="primary" icon={<PlusOutlined />} onClick={showCreateModal}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => isShowModal(true)}>
             新增
           </Button>,
         ]}
       >
       </ProTable>
+
+      {isModalVisible &&
+        <CreateOrEdit
+          isModalVisible={isModalVisible}
+          isShowModal={isShowModal}
+          actionRef = {actionRef}
+          menuData={menuData}
+          editId = {editId}
+        />
+      }
 
     </PageContainer>
   )

@@ -1,5 +1,5 @@
 import {
-  useRef,
+  useRef, useState,
 } from "react";
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
@@ -27,7 +27,8 @@ export type TableListItem = {
 
 
 export default () =>{
-
+  const [ isModalVisible, setIsModalVisible ] = useState(false);
+  const [ editId, setEditId] = useState<number>(0);
   const actionRef = useRef<ActionType>();
 
   //自定查询
@@ -45,6 +46,16 @@ export default () =>{
       total: ret.data.meta.pagination.total,
       success: ret.status === 200
     }
+  }
+
+  /**
+   *  显示对话框
+   * @param show
+   * @param id
+   */
+  const isShowModal = (show: boolean, id = undefined)=> {
+    setEditId(id);
+    setIsModalVisible(show);
   }
 
   const columns: ProColumns<TableListItem>[] = [
@@ -91,7 +102,7 @@ export default () =>{
       valueType: 'option',
       align: 'center',
       render: (_,record) => [
-        <a key="link">编辑</a>,
+        <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>,
         <Popconfirm key="del" placement="top" title='确认操作?' okText="Yes" cancelText="No">
           <a>删除</a>
         </Popconfirm>,
@@ -114,12 +125,23 @@ export default () =>{
           onChange: (page) => console.log(page),
         }}
         toolBarRender={() => [
-          <Button type="primary" icon={<PlusOutlined />} key="primary">
+          <Button type="primary" icon={<PlusOutlined />} key="primary" onClick={() => isShowModal(true)}>
             新增
           </Button>,
         ]}
       >
       </ProTable>
+
+      {isModalVisible &&
+        <CreateOrEdit
+          isModalVisible={isModalVisible}
+          isShowModal={isShowModal}
+          actionRef = {actionRef}
+          editId = {editId}
+        />
+      }
+
+
     </PageContainer>
   )
 }

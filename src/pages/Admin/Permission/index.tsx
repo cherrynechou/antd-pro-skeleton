@@ -40,9 +40,10 @@ export type TableListItem = {
 export default () =>{
 
   const [ permissionTreeData, setPermissionTreeData ] = useState<any>([]);
+  const [ isModalVisible, setIsModalVisible ] = useState(false);
+  const [ editId, setEditId] = useState<number>(0);
 
   const actionRef = useRef<ActionType>();
-
 
   //自定查询
   const requestData = async () =>{
@@ -52,6 +53,16 @@ export default () =>{
       data: permissionRes.data,
       success: permissionRes.status === 200
     }
+  }
+
+  /**
+   *  显示对话框
+   * @param show
+   * @param id
+   */
+  const isShowModal = (show: boolean, id = undefined)=> {
+    setEditId(id);
+    setIsModalVisible(show);
   }
 
   //列表
@@ -117,7 +128,7 @@ export default () =>{
       valueType: 'option',
       align: 'center',
       render: (_,record) => [
-        <a key="link" >编辑</a>,
+        <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>,
         <Popconfirm key="del" placement="top" title='确认操作?' okText="Yes" cancelText="No">
           <a>删除</a>
         </Popconfirm>,
@@ -138,15 +149,22 @@ export default () =>{
         rowSelection={{ fixed: true }}
         pagination={false}
         toolBarRender={() => [
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => isShowModal(true)}>
             新增
           </Button>,
         ]}
       >
       </ProTable>
 
-      <CreateOrEdit
-      />
+      {isModalVisible &&
+        <CreateOrEdit
+          isModalVisible={isModalVisible}
+          isShowModal={isShowModal}
+          actionRef = {actionRef}
+          permissionTreeData = {permissionTreeData}
+          editId = {editId}
+        />
+      }
 
     </PageContainer>
   )
