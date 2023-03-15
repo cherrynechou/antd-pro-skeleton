@@ -16,7 +16,11 @@ import {
   SelectIcon
 } from '@/components/Forms'
 import { treeToOrderList } from '@/utils/utils';
-import { getMenu, updateMenu } from '@/services/admin/auth/menu'
+import {
+  createMenu,
+  getMenu,
+  updateMenu
+} from '@/services/admin/auth/menu'
 import {queryAllRoles} from "@/services/admin/auth/role";
 import { routeList } from "./routeListData";
 import _ from 'lodash';
@@ -109,11 +113,16 @@ export default (props: any) =>{
       status: !!pick_values.status ? 1 : 0
     };
 
-    const response = await updateMenu(editId,new_values);
+    let response ={};
+    if(editId === undefined){
+      response = await createMenu(fieldsValue);
+    }else{
+      response = await updateMenu(editId,new_values);
+    }
 
     if(response.status === 200){
       isShowModal(false);
-      message.success('修改成功');
+      message.success(`${title}成功`);
       setTimeout(()=>{
         window.location.reload();
       },100)

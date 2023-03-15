@@ -7,6 +7,7 @@ import {
 } from '@/services/admin/auth/role';
 import {
   getUser,
+  createUser,
   updateUser
 } from '@/services/admin/auth/user';
 import { PlusOutlined } from '@ant-design/icons';
@@ -84,15 +85,20 @@ export default (props: any) =>{
   useEffect(() => {
     fetchApi();
   },[])
-
-
+  
   const handleOk = async () =>{
     const fieldsValue = await form.validateFields();
 
     //去掉 confirm
     const fieldsPostValue = _.pick(fieldsValue,['name','username','avatar','roles','password']);
 
-    const response = await updateUser(editId, fieldsPostValue);
+    let response = {};
+    if(editId === undefined){
+      response = await createUser(fieldsPostValue);
+    }else{
+      response = await updateUser(editId, fieldsPostValue);
+    }
+
     if(response.status === 200){
       isShowModal(false);
       message.success('更新成功');

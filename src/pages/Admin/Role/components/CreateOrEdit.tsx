@@ -15,6 +15,7 @@ import {
   queryAllPermissions
 } from '@/services/admin/auth/permission';
 import {
+  createRole,
   getRole,
   updateRole
 } from '@/services/admin/auth/role';
@@ -87,10 +88,16 @@ export default (props: any) =>{
   const handleOk = async () =>{
     const fieldsValue = await form.validateFields();
 
-    const response = await updateRole(editId,fieldsValue);
+    let response = {};
+    if(editId === undefined){
+      response = await createRole(fieldsValue);
+    }else{
+      response = await updateRole(editId,fieldsValue);
+    }
+
     if(response.status === 200){
       isShowModal(false);
-      message.success('修改成功');
+      message.success(`${title}成功`);
       actionRef.current.reload();
     }
   }

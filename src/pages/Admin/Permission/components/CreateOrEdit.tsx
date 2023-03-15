@@ -14,6 +14,7 @@ import {
   treeToOrderList
 } from "@/utils/utils";
 import {
+  createPermission,
   queryAllPermissionRoutes,
   queryPermission,
   updatePermission
@@ -87,11 +88,18 @@ export default (props: any) =>{
   const handleOk = async () =>{
     const fieldsValue = await form.validateFields();
 
-    const response = await updatePermission(editId, fieldsValue);
+    let response = {};
+
+    if(editId === undefined){
+      response = await createPermission(fieldsValue);
+    }else{
+      response = await updatePermission(editId, fieldsValue);
+    }
+
     if(response.status === 200){
       isShowModal(false);
       actionRef.current.reload();
-      message.success('修改成功');
+      message.success(`${title}成功`);
     }
   }
 
