@@ -100,7 +100,10 @@ export default (props: any) =>{
       }
     }else{
       const sort_max = queryListMaxValue(treeValues,'order');
-      form.setFieldsValue({order: sort_max + 1})
+      form.setFieldsValue({
+        order: sort_max + 1,
+        status: true
+      })
     }
   }
 
