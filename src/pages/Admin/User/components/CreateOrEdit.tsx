@@ -85,7 +85,7 @@ export default (props: any) =>{
   useEffect(() => {
     fetchApi();
   },[])
-  
+
   const handleOk = async () =>{
     const fieldsValue = await form.validateFields();
 

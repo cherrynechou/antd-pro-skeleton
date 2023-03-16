@@ -89,7 +89,6 @@ export default (props: any) =>{
     const fieldsValue = await form.validateFields();
 
     let response = {};
-
     if(editId === undefined){
       response = await createPermission(fieldsValue);
     }else{

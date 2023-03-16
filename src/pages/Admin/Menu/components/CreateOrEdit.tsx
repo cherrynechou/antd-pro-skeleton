@@ -15,7 +15,10 @@ import {
 import {
   SelectIcon
 } from '@/components/Forms'
-import { treeToOrderList } from '@/utils/utils';
+import {
+  treeToOrderList,
+  queryListMaxValue
+} from '@/utils/utils';
 import {
   createMenu,
   getMenu,
@@ -41,7 +44,8 @@ export default (props: any) =>{
 
   const fetchApi = async () =>{
     //生成树型结构
-    setTreeData(treeToOrderList(menuData));
+    const treeValues = treeToOrderList(menuData);
+    setTreeData(treeValues);
 
     const targets=[
       {label:'新窗口', value:'_blank'},
@@ -94,6 +98,9 @@ export default (props: any) =>{
           status: menu.status
         });
       }
+    }else{
+      const sort_max = queryListMaxValue(treeValues,'order');
+      form.setFieldsValue({order: sort_max + 1})
     }
   }
 
@@ -101,7 +108,9 @@ export default (props: any) =>{
     fetchApi();
   },[]);
 
-
+  /**
+   * 提交
+   */
   const handleOk = async () =>{
     const fieldsValue = await form.validateFields();
 
@@ -122,7 +131,7 @@ export default (props: any) =>{
 
     if(response.status === 200){
       isShowModal(false);
-      message.success(`${title}成功`);
+      message.success('修改成功');
       setTimeout(()=>{
         window.location.reload();
       },100)
