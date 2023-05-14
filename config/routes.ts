@@ -1,39 +1,39 @@
 ﻿export default [
   {
-    path: '/auth',
+    path: '/admin',
     layout: false,
     routes: [
       {
         name:'login',
-        path:'/auth/login',
-        component: './Auth/Login'
+        path:'/admin/login',
+        component: './Admin/Login'
       }, {
         component: './Exception/404',
       },
     ],
   },{
-    path: '/admin',
-    name: 'admin',
+    path: '/auth',
+    name: 'auth',
     routes: [
       {
-        path: '/admin',
-        redirect: '/admin/users'
+        path: '/auth',
+        redirect: '/auth/users'
       }, {
-        path: '/admin/users',
+        path: '/auth/users',
         name: 'user',
-        component: './Admin/User/index',
+        component: './Auth/User/index',
       }, {
-        path: '/admin/roles',
+        path: '/auth/roles',
         name: 'role',
-        component: './Admin/Role/index',
+        component: './Auth/Role/index',
       }, {
-        path: '/admin/permissions',
+        path: '/auth/permissions',
         name: 'permission',
-        component: './Admin/Permission/index',
+        component: './Auth/Permission/index',
       }, {
-        path: '/admin/menu',
+        path: '/auth/menu',
         name: 'menu',
-        component: './Admin/Menu/index',
+        component: './Auth/Menu/index',
       }
     ]
   }, {
