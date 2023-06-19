@@ -11,7 +11,7 @@ import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { getMenuList } from "@/services/admin/system/common";
 
 const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/auth/login';
+const loginPath = '/admin/login';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
