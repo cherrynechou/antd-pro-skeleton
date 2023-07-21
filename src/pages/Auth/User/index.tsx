@@ -226,7 +226,7 @@ export default () =>{
         headerTitle="用户列表"
         rowSelection={{ fixed: true }}
         pagination={{
-          pageSize: 20,
+          pageSize: 15,
           onChange: (page) => console.log(page),
         }}
         toolBarRender={() => [
