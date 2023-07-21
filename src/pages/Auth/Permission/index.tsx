@@ -16,13 +16,13 @@ import {
   Popconfirm,
   Space,
   Tag
-} from "antd";
+} from 'antd';
 import { v4 as uuid } from 'uuid';
 import { PlusOutlined } from "@ant-design/icons";
 import {
   queryPermissions,
   destroyPermission
-} from "@/services/admin/auth/permission";
+} from '@/services/admin/auth/permission';
 import CreateOrEdit from './components/CreateOrEdit'
 
 export type TableListItem = {
@@ -61,7 +61,7 @@ export default () =>{
    * @param show
    * @param id
    */
-  const isShowModal = (show: boolean, id = undefined)=> {
+  const isShowModal = (show: boolean, id?: number | undefined)=> {
     setEditId(id);
     setIsModalVisible(show);
   }
@@ -141,7 +141,7 @@ export default () =>{
       align: 'center',
       render: (_,record) => (
         <Space>
-          <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>
+          <a key="link" onClick={() => isShowModal(true, record.id)}>编辑</a>
           <Popconfirm key="del" placement="top" title='确认操作?' onConfirm={ () => confirmDel(record.id) } okText="Yes" cancelText="No">
             <a>删除</a>
           </Popconfirm>

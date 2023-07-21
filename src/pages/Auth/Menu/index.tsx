@@ -67,7 +67,7 @@ export default () =>{
    * @param show
    * @param id
    */
-  const isShowModal = (show: boolean, id = undefined)=> {
+  const isShowModal = (show: boolean, id?: number | undefined)=> {
     setEditId(id);
     setIsModalVisible(show);
   }

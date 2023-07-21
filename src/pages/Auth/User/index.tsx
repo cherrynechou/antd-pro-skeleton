@@ -24,7 +24,7 @@ import {
   resetPassword,
   destroyUser
 } from '@/services/admin/auth/user';
-import _ from 'lodash';
+import lodash from 'lodash';
 import { PlusOutlined } from '@ant-design/icons';
 import CreateOrEdit from './components/CreateOrEdit'
 
@@ -58,7 +58,7 @@ export default () =>{
 
   //获取用户用户列表
   const requestData = async (params: any) =>{
-    const filter = _.omit(params,['current','pageSize']);
+    const filter = lodash.omit(params,['current','pageSize']);
     const rename = {
       page:params.current,
       pageSize:params.pageSize
@@ -89,7 +89,7 @@ export default () =>{
    * @param show
    * @param id
    */
-  const isShowModal = (show: boolean, id = undefined)=> {
+  const isShowModal = (show: boolean, id?: number | undefined)=> {
     setEditId(id);
     setIsModalVisible(show);
   }
@@ -148,7 +148,7 @@ export default () =>{
       render: (_, record) => (
         <Space>
           {record.roles.data.map( (item: RoleItem,index: number) => (
-            <Tag key={index} color='#586cb1'>
+            <Tag key={uuid()} color='#586cb1'>
               {item.name}
             </Tag>
           ))}

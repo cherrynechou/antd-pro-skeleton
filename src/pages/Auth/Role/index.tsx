@@ -17,8 +17,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import {
   queryRoles,
   destroyRole
-} from "@/services/admin/auth/role";
-import _ from "lodash";
+} from '@/services/admin/auth/role';
+import lodash from 'lodash';
 import CreateOrEdit from './components/CreateOrEdit'
 
 
@@ -38,7 +38,7 @@ export default () =>{
 
   //自定查询
   const requestData = async (params: any) =>{
-    const filter = _.omit(params,['current','pageSize']);
+    const filter = lodash.omit(params,['current','pageSize']);
     const rename = {
       page: params.current,
       pageSize: params.pageSize
@@ -58,7 +58,7 @@ export default () =>{
    * @param show
    * @param id
    */
-  const isShowModal = (show: boolean, id = undefined)=> {
+  const isShowModal = (show: boolean, id?: number | undefined)=> {
     setEditId(id);
     setIsModalVisible(show);
   }
@@ -118,9 +118,9 @@ export default () =>{
       key: 'option',
       valueType: 'option',
       align: 'center',
-      render: (_,record) => (
+      render: (_, record) => (
         <Space>
-          <a key="link" onClick={() => isShowModal(true,record.id)}>编辑</a>
+          <a key="link" onClick={() => isShowModal(true, record.id)}>编辑</a>
           <Popconfirm key="del" placement="top" title='确认操作?' okText="Yes" cancelText="No" onConfirm={ () => confirmDel(record.id) }>
             <a>删除</a>
           </Popconfirm>
