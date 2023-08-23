@@ -70,33 +70,34 @@ export default (props: any) =>{
     //获取角色列表
     const rolesRes = await queryAllRoles();
     if(rolesRes.status === 200){
-      const rolesData = rolesRes.data;
-      const rolesValue: any[] = [];
-      rolesData.forEach((item: any)=>{
-        rolesValue.push({value:item.id,label:item.name});
+      const _rolesData = rolesRes.data;
+      const _rolesValue: any[] = [];
+      _rolesData.forEach((item: any)=>{
+        _rolesValue.push({value:item.id,label:item.name});
       })
-      setRoles(rolesValue);
+      setRoles(_rolesValue);
     }
 
     if(editId !== undefined){
       const menuRes = await getMenu(editId);
       if(menuRes.status === 200){
-        const menu = menuRes.data;
+        const currentData = menuRes.data;
         let rolesValue: any[] = [];
-        if(menu.roles.length>0){
-          rolesValue = menu.roles.map((item: any) => {return item.id})
+        if(currentData.roles.length>0){
+          rolesValue = currentData.roles.map((item: any) => {return item.id})
         }
 
         setInitialValues({
-          name: menu.name,
-          parent_id: menu.parent_id,
-          icon: menu.icon,
-          path: menu.path,
-          target: menu.target,
-          order: menu.order,
+          name: currentData.name,
+          parent_id: currentData.parent_id,
+          icon: currentData.icon,
+          path: currentData.path,
+          target: currentData.target,
+          order: currentData.order,
           roles:rolesValue,
-          status: menu.status
+          status: currentData.status
         });
+        
       }
     }else{
       const sort_max = queryListMaxValue(treeValues,'order');
@@ -150,7 +151,8 @@ export default (props: any) =>{
   }
 
   return (
-    <Modal title={title}
+    <Modal 
+       title={title}
        open={isModalVisible}
        onOk={handleOk}
        onCancel={() => isShowModal(false)}

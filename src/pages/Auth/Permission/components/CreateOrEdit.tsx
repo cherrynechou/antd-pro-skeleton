@@ -22,8 +22,9 @@ import {
 import '@/styles/auth.less'
 
 export default (props: any) =>{
-  const [ treeData, setTreeData] = useState<any>([]);
+
   const [ initialValues, setInitialValues ] = useState<any>({});
+  const [ treeData, setTreeData] = useState<any>([]);
   const [ httpMethods,setHttpMethods ] = useState<any>([]);
   const [ httpPaths, setHttpPaths ]= useState<any>([]);
 
@@ -48,32 +49,32 @@ export default (props: any) =>{
 
     const pathsRes = await queryAllPermissionRoutes();
     if(pathsRes.status === 200){
-      const pathData = pathsRes.data;
-      const pathValues: any[] = [];
-      for( const key in pathData ){
-        pathValues.push({
-          label:pathData[key],
-          value:pathData[key]
+      const _pathData = pathsRes.data;
+      const _pathValues: any[] = [];
+      for( const key in _pathData ){
+        _pathValues.push({
+          label: _pathData[key],
+          value: _pathData[key]
         })
       }
-      setHttpPaths(pathValues)
+      setHttpPaths(_pathValues)
     }
 
     if(editId !== undefined){
       const permissionRes = await queryPermission(editId);
       if(permissionRes.status === 200){
-        const permissionData = permissionRes.data;
+        const currentData = permissionRes.data;
         let methods: any[]=[];
-        if(!permissionData.methods.includes('ANY')){
-          methods = permissionData.methods;
+        if(!currentData.methods.includes('ANY')){
+          methods = currentData.methods;
         }
 
         setInitialValues({
-          parent_id: permissionData.parent_id,
-          name: permissionData.name,
-          slug: permissionData.slug,
+          parent_id: currentData.parent_id,
+          name: currentData.name,
+          slug: currentData.slug,
           http_method: methods,
-          http_path: permissionData.paths,
+          http_path: currentData.paths,
         });
       }
     }
@@ -104,7 +105,8 @@ export default (props: any) =>{
 
 
   return (
-    <Modal title={title}
+    <Modal 
+       title={title}
        open={isModalVisible}
        onOk={handleOk}
        onCancel={()=>isShowModal(false)}

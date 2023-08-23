@@ -37,8 +37,8 @@ export default (props: any) =>{
 
     const permissionAllRes = await queryAllPermissions();
     if(permissionAllRes.status === 200){
-      const permissionData = permissionAllRes.data;
-      const listTreePermissionData = listToTree(permissionData)
+      const _permissionData = permissionAllRes.data;
+      const listTreePermissionData = listToTree(_permissionData)
       setTreeData(listTreePermissionData);
       setTreeLeafRecord(filterTreeLeafNode(listTreePermissionData))
     }
@@ -46,17 +46,17 @@ export default (props: any) =>{
     if(editId !== undefined){
       const roleRes = await getRole(editId);
       if(roleRes.status === 200){
-        const roleData = roleRes.data;
+        const currentData = roleRes.data;
         let permissionList: any[] = [];
-        if(roleData.permissions.length>0){
-          permissionList = roleData.permissions.map((item: any)=>{return item.id})
+        if(currentData.permissions.length>0){
+          permissionList = currentData.permissions.map((item: any)=>{return item.id})
         }
 
         setDefaultCheckedKeys(permissionList);
 
         setInitialValues({
-          name: roleData.name,
-          slug: roleData.slug,
+          name: currentData.name,
+          slug: currentData.slug,
           permissions:JSON.stringify(permissionList)
         })
       }
@@ -103,7 +103,8 @@ export default (props: any) =>{
   }
 
   return (
-    <Modal title={title}
+    <Modal 
+       title={title}
        bodyStyle={{'height':'calc(100vh - 400px)','overflowY':'auto'}}
        open={isModalVisible}
        onOk={handleOk}

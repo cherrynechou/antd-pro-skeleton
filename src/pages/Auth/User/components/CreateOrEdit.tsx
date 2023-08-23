@@ -43,41 +43,42 @@ export default (props: any) =>{
     const roleRes = await queryAllRoles();
 
     if(roleRes.status === 200){
-      const roleData = roleRes.data;
+      const _roleData = roleRes.data;
 
-      const roleList: any[] = [];
-      roleData.forEach((item: any)=>{
-        roleList.push({label:item.name,value:item.id});
+      const _roleList: any[] = [];
+      _roleData.forEach((item: any)=>{
+        _roleList.push({label:item.name,value:item.id});
       })
 
-      setRoles(roleList);
+      setRoles(_roleList);
     }
 
     if(editId !== undefined){
       const userRes = await getUser(editId);
       if(userRes.status === 200){
-        const userData = userRes.data;
+        const currentData = userRes.data;
 
         const roleList: any[] = [];
-        userData.roles.forEach((item: any)=>{
+        currentData.roles.forEach((item: any)=>{
           roleList.push(item.id);
         })
 
         setFileList([
           {
-            uid: userData.id,
+            uid: currentData.id,
             name: '',
             status: 'done',
-            url: userData.avatar,
+            url: currentData.avatar,
           }
         ]);
 
         setInitialValues({
-          username: userData.username,
-          name: userData.name,
-          avatar:userData.avatar,
+          username: currentData.username,
+          name: currentData.name,
+          avatar:currentData.avatar,
           roles:roleList
         });
+        
       }
     }
   }
@@ -149,7 +150,8 @@ export default (props: any) =>{
 
 
   return (
-    <Modal title={title}
+    <Modal 
+       title={title}
        open={isModalVisible}
        onOk={handleOk}
        onCancel={() => isShowModal(false)}
