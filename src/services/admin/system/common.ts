@@ -1,19 +1,18 @@
-import request from "@/utils/request";
+import request from '@/utils/request';
 
 /**
  * 登录
  * @param params
  */
 export function login(params: any = {}) {
-  return request.post('/admin/oauth/login',  params );
+  return request.post('/oauth/login', params);
 }
-
 
 /**
  * 获取当前用户菜单列表
  */
-export function getMenuList( ) {
-  return request.get('/admin/getMenuList' );
+export function getMenuList() {
+  return request.get('/getMenuList');
 }
 
 /**
@@ -21,13 +20,12 @@ export function getMenuList( ) {
  * @param params
  */
 export function uploadFile(params: any = {}) {
-  return request.post('/admin/upload/files', params);
+  return request.post('/upload/files', params);
 }
-
 
 /**
  * 清除缓存
  */
-export function clearCache(){
-  return request.get('/admin/cache/clear');
+export function clearCache() {
+  return request.get('/cache/clear');
 }

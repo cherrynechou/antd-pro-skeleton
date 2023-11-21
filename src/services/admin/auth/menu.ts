@@ -1,10 +1,10 @@
-import  request  from '@/utils/request';
+import request from '@/utils/request';
 
 /**
  * 获取菜单列表
  */
 export function queryMenus() {
-  return request.get('/admin/auth/menu');
+  return request.get('/auth/menu');
 }
 
 /**
@@ -12,7 +12,7 @@ export function queryMenus() {
  * @param params
  */
 export function createMenu(params: any = {}) {
-  return request.post('/admin/auth/menu', params);
+  return request.post('/auth/menu', params);
 }
 
 /**
@@ -20,7 +20,7 @@ export function createMenu(params: any = {}) {
  * @param id
  */
 export function getMenu(id: number) {
-  return request.get(`/admin/auth/menu/${id}`);
+  return request.get(`/auth/menu/${id}`);
 }
 
 /**
@@ -28,7 +28,7 @@ export function getMenu(id: number) {
  * @param id
  */
 export function destroyMenu(id: number) {
-  return request.delete(`/admin/auth/menu/${id}`);
+  return request.delete(`/auth/menu/${id}`);
 }
 
 /**
@@ -37,13 +37,13 @@ export function destroyMenu(id: number) {
  * @param params
  */
 export function updateMenu(id: string, params: any = {}) {
-  return request.put(`/admin/auth/menu/${id}`, params)
+  return request.put(`/auth/menu/${id}`, params);
 }
 
 /**
  *
  * @param id
  */
-export function switchMenu(id: number){
-  return request.patch(`/admin/menu/${id}/switch`);
+export function switchMenu(id: number) {
+  return request.patch(`/menu/${id}/switch`);
 }

@@ -15,10 +15,10 @@ export type GlobalHeaderRightProps = {
 /**
  * 退出登录
  */
-const removeAccessToken = async ()=>{
+const removeAccessToken = async () => {
   await removeLocalStorage('access_token');
   await removeLocalStorage('token_type');
-}
+};
 
 /**
  * 退出登录，并且将当前的 url 保存
@@ -28,9 +28,9 @@ const loginOut = async () => {
   const { query = {}, search, pathname } = history.location;
   const { redirect } = query;
   // Note: There may be security issues, please note
-  if (window.location.pathname !== '/auth/login' && !redirect) {
+  if (window.location.pathname !== '/admin/login' && !redirect) {
     history.replace({
-      pathname: '/auth/login',
+      pathname: '/admin/login',
       search: stringify({
         redirect: pathname + search,
       }),

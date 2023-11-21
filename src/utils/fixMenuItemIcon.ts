@@ -6,7 +6,7 @@ import * as allIcons from '@ant-design/icons';
 const fixMenuItemIcon = (menus: MenuDataItem[], iconType = 'Outlined'): MenuDataItem[] => {
   menus.forEach((item) => {
     const { icon, routes } = item;
-    if (typeof icon === 'string') {
+    if (typeof icon === 'string' && icon) {
       const fixIconName = icon.slice(0, 1).toLocaleUpperCase() + icon.slice(1) + iconType;
       item.icon = React.createElement(allIcons[fixIconName] || allIcons[icon]);
       if (!item.redirect) {
