@@ -1,2 +1,2 @@
 
-export const API_USER_LOGIN = '/admin/oauth/login'
+export const API_USER_LOGIN = '/oauth/login'

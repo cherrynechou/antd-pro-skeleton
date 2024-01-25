@@ -173,7 +173,7 @@ export default (props: any) =>{
             >
               <Select
                 options={treeData}
-                style={{ width: 200 }}
+                style={{ width: 400 }}
                 placeholder="请选择父级" />
             </Form.Item>
 
@@ -190,7 +190,9 @@ export default (props: any) =>{
               rules={[{ required: true, message: '名称是必填项！' }]}
             >
               <Input
-                placeholder="请输入 名称" />
+                placeholder="请输入 名称"
+                style={{ width: 500 }}
+              />
             </Form.Item>
 
             <Form.Item
@@ -199,7 +201,7 @@ export default (props: any) =>{
             >
               <Select
                 options={routes}
-                style={{ width: 200 }}
+                style={{ width: 400 }}
                 placeholder="请选择 路由"
               />
             </Form.Item>
@@ -209,7 +211,9 @@ export default (props: any) =>{
               label="跳转地址"
             >
               <Input
-                placeholder="请输入 地址" />
+                placeholder="请输入 地址" 
+                style={{ width: 500 }}
+              />
             </Form.Item>
 
             <Form.Item
@@ -249,7 +253,7 @@ export default (props: any) =>{
               <Select
                 mode="multiple"
                 options={roles}
-                style={{ width: 200 }}
+                style={{ width: 500 }}
                 placeholder="请选择角色"
               />
             </Form.Item>
