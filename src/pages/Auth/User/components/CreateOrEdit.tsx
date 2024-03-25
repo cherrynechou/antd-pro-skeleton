@@ -1,12 +1,41 @@
-import { useEffect, useState } from 'react';
-import { queryAllRoles } from '@/services/admin/auth/role';
-import { getUser, createUser, updateUser } from '@/services/admin/auth/user';
-import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Skeleton, Form, Input, Upload, Select, message } from 'antd';
+import { 
+  useEffect, 
+  useState 
+} from 'react';
+import { 
+  queryAllRoles
+   } from '@/services/admin/auth/role';
+import { 
+  getUser, 
+  createUser, 
+  updateUser 
+} from '@/services/admin/auth/user';
+import {
+  queryAllPermissions
+} from '@/services/admin/auth/permission';
+import { 
+  uploadImageFile 
+} from '@/services/admin/system/common';
+import { 
+  PlusOutlined 
+} from '@ant-design/icons';
+import { 
+  Modal, 
+  Skeleton, 
+  Form, 
+  Input, 
+  Upload, 
+  Select,
+  message 
+} from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { RcFile, UploadProps } from 'antd/es/upload';
-import { uploadFile } from '@/services/admin/system/common';
 import lodash from 'lodash';
+
+import {
+  filterTreeLeafNode,
+  listToTree
+} from "@/utils/utils";
 
 import '@/styles/auth.less';
 
@@ -17,25 +46,36 @@ export default (props: any) => {
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
   const [roles, setRoles] = useState<any>([]);
-  const { isModalVisible, isShowModal, editId, actionRef } = props;
+  const [treeData, setTreeData] = useState<any>([]);
+  const [treeLeafRecord, setTreeLeafRecord] = useState<any>([]);
+  const [defaultCheckedKeys, setDefaultCheckedKeys] = useState<any>([]);
+  const [userRoles,setUserRoles] = useState<any>([]);
+  const {isModalVisible, isShowModal, editId, actionRef} = props;
 
   const [form] = Form.useForm();
 
   const title = editId === undefined ? '添加' : '编辑';
 
   const fetchApi = async () => {
-    const roleRes = await queryAllRoles();
 
+    const roleRes = await queryAllRoles();
     if (roleRes.status === 200) {
       const _roleData = roleRes.data;
-
       const _roleList: any[] = [];
       _roleData.forEach((item: any) => {
         _roleList.push({ label: item.name, value: item.id });
       });
-
       setRoles(_roleList);
     }
+
+    const permissionAllRes = await queryAllPermissions();
+    if(permissionAllRes.status === 200){
+      const _permissionData = permissionAllRes.data;
+      const listTreePermissionData = listToTree(_permissionData)
+      setTreeData(listTreePermissionData);
+      setTreeLeafRecord(filterTreeLeafNode(listTreePermissionData))
+    }
+
 
     if (editId !== undefined) {
       const userRes = await getUser(editId);
@@ -52,15 +92,29 @@ export default (props: any) => {
             uid: currentData.id,
             name: '',
             status: 'done',
-            url: currentData.avatar,
+            url: currentData.avatar_url,
           },
         ]);
+
+        let _permissionList: any[] = [];
+        if(currentData.permissions.length>0){
+          _permissionList = currentData.permissions.map((item: any)=>{return item.id});
+        }
+
+        let _roleList: any[] = [];
+        if(currentData.roles.length>0){
+          _roleList= currentData.roles.map((item: any)=>{return item.slug});
+          setUserRoles(_roleList);
+        }
+
+        setDefaultCheckedKeys(_permissionList);
 
         setInitialValues({
           username: currentData.username,
           name: currentData.name,
           avatar: currentData.avatar,
           roles: roleList,
+          permissions:JSON.stringify(_permissionList)
         });
       }
     }
@@ -83,6 +137,7 @@ export default (props: any) => {
       'avatar',
       'roles',
       'password',
+      'permissions'
     ]);
 
     let response = {};
@@ -130,31 +185,83 @@ export default (props: any) => {
     </div>
   );
 
-  const handleUpload = async (options: any) => {
-    const { file } = options;
-    options.onProgress({ percent: 50 });
-    setFileList([file]);
-    const name = file.name;
-    const fileName = name.substring(0, name.indexOf('.'));
+
+  /**
+   * 上传之前
+   */
+  const handleBeforeUpload = async (file: any) => {
+    const allowFormat = file.type === 'image/jpeg' || file.type === 'image/png';
+
+    if (!allowFormat) {
+      message.error('只允许 JPG/PNG 文件!', 1000);
+      return false;
+    }
+
+    if(file.type == 'image/jpeg'){
+      setFileExtension('jpg');
+    }else if(file.type == 'image/png'){
+      setFileExtension('png');
+    }
+
+    return allowFormat ;
+  }
+
+  /**
+   *
+   * @param options
+   */
+  const handleCustomUpload = async (options: any) => {
+    const { file，onProgress } = options;
+    onProgress({ percent: 50 });
+
     getBase64(file).then((r: any) => {
       const index = r.indexOf('base64');
-      const fileValue = r.substring(index + 7);
-
-      const image_parts = r.split(';base64,');
-      const image_type_aux = image_parts[0].split('image/');
+      const fileData = r.substring(index + 7);
 
       const formData = {
-        upload_type: image_type_aux[1],
-        upload_data: fileValue,
-      };
+        extension: fileExtension,
+        fileData: fileData
+      }
 
-      uploadFile(formData).then((response: any) => {
+      uploadImageFile(formData).then((response: any) => {
         if (response.status === 200) {
+
+          setFileList([
+            {
+              uid: '1',
+              name: '',
+              status: 'done',
+              url: response.data.remotePath,
+            }
+          ]);
+
+          form.setFieldsValue({
+            avatar:response.data.path
+          });
+
           message.success('上传成功');
         }
       });
     });
   };
+
+
+  const onSelect: TreeProps['onSelect'] = (selectedKeys) => {
+    //找出叶子节点
+    const filterChildNodes = treeLeafRecord.map((item: any) => {return item.id})
+    const filterSameKeys = filterChildNodes.filter((item: any)=> (selectedKeys.indexOf(item) > -1))
+    form.setFieldsValue({permissions:JSON.stringify( filterSameKeys) });
+  };
+
+  const onCheck: TreeProps['onCheck'] = (checkedKeys) => {
+    // @ts-ignore
+    const checkedKeysResult = [...checkedKeys]
+    //找出叶子节点
+    const filterChildNodes = treeLeafRecord.map((item: any) => {return item.id})
+    const filterSameKeys = filterChildNodes.filter((item: any)=> (checkedKeysResult?.indexOf(item) > -1))
+    form.setFieldsValue({permissions:JSON.stringify( filterSameKeys) });
+  };
+
 
   return (
     <Modal
@@ -165,9 +272,7 @@ export default (props: any) => {
       destroyOnClose
       width={750}
     >
-      {Object.keys(initialValues).length === 0 && editId !== undefined ? (
-        <Skeleton paragraph={{ rows: 4 }} />
-      ) : (
+      {Object.keys(initialValues).length === 0 && editId !== undefined ? (<Skeleton paragraph={{ rows: 4 }} />) : (
         <Form form={form} initialValues={initialValues} autoComplete="off">
           <Form.Item
             name="username"
@@ -194,7 +299,8 @@ export default (props: any) => {
               accept="image/*"
               listType="picture-card"
               fileList={fileList}
-              customRequest={handleUpload}
+              customRequest={ handleCustomUpload }
+              beforeUpload = {handleBeforeUpload}
               onPreview={handlePreview}
               onChange={handleChange}
             >
@@ -288,6 +394,32 @@ export default (props: any) => {
           >
             <Select mode="multiple" options={roles} placeholder="请选择 角色" />
           </Form.Item>
+
+          {!userRoles.includes('administrator') && <>
+            <Form.Item
+              name="permissions"
+              hidden
+            >
+              <Input
+                hidden
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="权限"
+            >
+              <Tree
+                checkable
+                defaultExpandAll={false}
+                defaultCheckedKeys={defaultCheckedKeys}
+                onSelect={onSelect}
+                onCheck={onCheck}
+                treeData={treeData}
+              />
+            </Form.Item>
+          </>
+          }
+
         </Form>
       )}
     </Modal>

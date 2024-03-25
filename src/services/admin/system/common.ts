@@ -16,11 +16,19 @@ export function getMenuList() {
 }
 
 /**
- * 上传文件
+ * 上传图片文件
  * @param params
  */
-export function uploadFile(params: any = {}) {
-  return request.post('/upload/files', params);
+export function uploadImageFile(params: any = {}) {
+  return request.post('/upload/imageFiles', params);
+}
+
+
+/**
+ *  excel上传 
+ */
+export function uploadExcelFile(params: any = {}){
+  return request.post('/upload/excelFiles', params);
 }
 
 /**
