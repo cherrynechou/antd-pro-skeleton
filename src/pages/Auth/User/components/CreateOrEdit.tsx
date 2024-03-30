@@ -1,32 +1,34 @@
-import { 
-  useEffect, 
-  useState 
+import {
+  useEffect,
+  useState
 } from 'react';
-import { 
+import type { TreeProps } from 'antd/es/tree';
+import {
   queryAllRoles
-   } from '@/services/admin/auth/role';
-import { 
-  getUser, 
-  createUser, 
-  updateUser 
+} from '@/services/admin/auth/role';
+import {
+  getUser,
+  createUser,
+  updateUser
 } from '@/services/admin/auth/user';
 import {
   queryAllPermissions
 } from '@/services/admin/auth/permission';
-import { 
-  uploadImageFile 
+import {
+  uploadImageFile
 } from '@/services/admin/system/common';
-import { 
-  PlusOutlined 
+import {
+  PlusOutlined
 } from '@ant-design/icons';
-import { 
-  Modal, 
-  Skeleton, 
-  Form, 
-  Input, 
-  Upload, 
+import {
+  Modal,
+  Skeleton,
+  Form,
+  Input,
+  Upload,
   Select,
-  message 
+  message,
+  Tree
 } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import type { RcFile, UploadProps } from 'antd/es/upload';
@@ -46,6 +48,7 @@ export default (props: any) => {
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
   const [roles, setRoles] = useState<any>([]);
+  const [fileExtension,setFileExtension ] = useState('');
   const [treeData, setTreeData] = useState<any>([]);
   const [treeLeafRecord, setTreeLeafRecord] = useState<any>([]);
   const [defaultCheckedKeys, setDefaultCheckedKeys] = useState<any>([]);
@@ -211,7 +214,7 @@ export default (props: any) => {
    * @param options
    */
   const handleCustomUpload = async (options: any) => {
-    const { file，onProgress } = options;
+    const { file, onProgress } = options;
     onProgress({ percent: 50 });
 
     getBase64(file).then((r: any) => {
