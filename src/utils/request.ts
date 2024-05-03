@@ -1,11 +1,9 @@
-import axios from 'axios';
+import axios,{ AxiosInstance,AxiosResponse ,AxiosError, InternalAxiosRequestConfig, HttpStatusCode } from 'axios';
 import { history } from 'umi';
 import { setLocalStorage, getLocalStorage } from '@/utils/LocalStorage';
 import { API_USER_LOGIN } from '@/constants/api'
 
-const SUCCESS_CODE = 200;
-
-const request =  axios.create({
+const request: AxiosInstance =  axios.create({
   baseURL: '/api',
   timeout: 5000,
   headers: {
@@ -40,17 +38,12 @@ const setAccessToken = async (data: any) =>{
 /**
  * 请求
  */
-request.interceptors.request.use(async (config) =>{
+request.interceptors.request.use(async (config: InternalAxiosRequestConfig) =>{
 
-  const auth = await getAccessToken();
+  const accessToken = await getAccessToken();
 
-  if(auth){
-
-    // @ts-ignore
-    config.headers = {
-      ...config.headers,
-      Authorization: auth
-    }
+  if(accessToken && config && config?.headers){
+    config.headers.Authorization = accessToken;
   }
 
   //删除属性值 为空 或者 undefined
@@ -62,13 +55,9 @@ request.interceptors.request.use(async (config) =>{
     });
   }
 
-  config.data = {
-    ...config.data
-  }
-
   return config;
 
-}, error => {
+}, (error:AxiosError) => {
   return Promise.reject(error);
 });
 
@@ -76,7 +65,7 @@ request.interceptors.request.use(async (config) =>{
 /**
  * 响应
  */
-request.interceptors.response.use(async (response)=>{
+request.interceptors.response.use(async (response: AxiosResponse)=>{
 
   const { data } = response.data;
 
@@ -84,14 +73,15 @@ request.interceptors.response.use(async (response)=>{
     await setAccessToken(data);
   }
 
-  if(response.status === SUCCESS_CODE){
+  if(response.status === HttpStatusCode.Ok){
     return response.data;
   }
 
   return Promise.reject(response?.data);
 
-}, error => {
-  if(error.response.status === 403){
+}, (error: AxiosError) => {
+
+  if(error?.response?.status === 403){
 
     history.replace({
       pathname: '/error/403',

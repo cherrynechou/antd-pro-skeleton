@@ -169,6 +169,7 @@ export default (props: any) =>{
             <Form.Item
               name="parent_id"
               label="父级"
+              labelCol={{ span: 3 }}
               rules={[{ required: true, message: '父级是必填项！' }]}
             >
               <Select
@@ -180,6 +181,7 @@ export default (props: any) =>{
             <Form.Item
               name="icon"
               label="图标"
+              labelCol={{ span: 3 }}
             >
               <SelectIcon placeholder="请选择 图标" onChange={handleIconChange} />
             </Form.Item>
@@ -198,6 +200,7 @@ export default (props: any) =>{
             <Form.Item
               name="path"
               label="路由"
+              labelCol={{ span: 3 }}
             >
               <Select
                 options={routes}
@@ -209,6 +212,7 @@ export default (props: any) =>{
             <Form.Item
               name="url"
               label="跳转地址"
+              labelCol={{ span: 3 }}
             >
               <Input
                 placeholder="请输入 地址" 
@@ -219,6 +223,7 @@ export default (props: any) =>{
             <Form.Item
               name="target"
               label="目标方式"
+              labelCol={{ span: 3 }}
             >
               <Select
                 options={linkTarget}
@@ -230,6 +235,7 @@ export default (props: any) =>{
             <Form.Item
               name="order"
               label="排序"
+              labelCol={{ span: 3 }}
             >
               <InputNumber
                 style={{ width: 400 }}
@@ -239,6 +245,7 @@ export default (props: any) =>{
             <Form.Item
               name="status"
               label="是否显示"
+              labelCol={{ span: 3 }}
               valuePropName="checked"
             >
               <Switch
@@ -249,6 +256,7 @@ export default (props: any) =>{
             <Form.Item
               name="roles"
               label="角色"
+              labelCol={{ span: 3 }}
             >
               <Select
                 mode="multiple"

@@ -124,6 +124,7 @@ export default (props: any) =>{
             <Form.Item
               name="parent_id"
               label="父级"
+              labelCol={{ span: 3 }}
               rules={[{ required: true, message: '父级是必填项！' }]}
             >
               <Select
@@ -135,6 +136,7 @@ export default (props: any) =>{
             <Form.Item
               name="name"
               label="名称"
+              labelCol={{ span: 3 }}
               rules={[{ required: true, message: '名称是必填项！' }]}
             >
               <Input
@@ -144,6 +146,7 @@ export default (props: any) =>{
             <Form.Item
               name="slug"
               label="标识"
+              labelCol={{ span: 3 }}
               rules={[{ required: true, message: '标识是必填项！' }]}
             >
               <Input
@@ -153,6 +156,7 @@ export default (props: any) =>{
             <Form.Item
               name="http_method"
               label="HTTP方法"
+              labelCol={{ span: 3 }}
             >
               <Select
                 mode="multiple"
@@ -164,6 +168,7 @@ export default (props: any) =>{
             <Form.Item
               name="http_path"
               label="HTTP路径"
+              labelCol={{ span: 3 }}
             >
               <Select
                 mode="multiple"

@@ -123,6 +123,7 @@ export default (props: any) =>{
             <Form.Item
               name="name"
               label="名称"
+              labelCol={{ span: 3 }}
               rules={[{ required: true, message: '名称是必填项！' }]}
             >
               <Input
@@ -132,6 +133,7 @@ export default (props: any) =>{
             <Form.Item
               name="slug"
               label="标识"
+              abelCol={{ span: 3 }}
               rules={[{ required: true, message: '标识是必填项！' }]}
             >
               <Input
@@ -148,6 +150,7 @@ export default (props: any) =>{
 
             <Form.Item
               label="权限"
+              labelCol={{ span: 3 }}
             >
               <Tree
                 checkable

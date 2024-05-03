@@ -280,6 +280,7 @@ export default (props: any) => {
           <Form.Item
             name="username"
             label="用户名"
+            labelCol={{ span: 3 }}
             rules={[{ required: true, message: '用户名是必填项！' }]}
           >
             <Input placeholder="请输入 用户名" />
@@ -288,6 +289,7 @@ export default (props: any) => {
           <Form.Item
             name="name"
             label="名 称"
+            labelCol={{ span: 3 }}
             rules={[{ required: true, message: '名称是必填项！' }]}
           >
             <Input placeholder="请输入 名称" />
@@ -297,7 +299,10 @@ export default (props: any) => {
             <Input hidden />
           </Form.Item>
 
-          <Form.Item label="头像">
+          <Form.Item 
+            label="头像"
+            labelCol={{ span: 3 }}
+          >
             <Upload
               accept="image/*"
               listType="picture-card"
@@ -320,6 +325,7 @@ export default (props: any) => {
               <Form.Item
                 name="password"
                 label="密码"
+                labelCol={{ span: 3 }}
                 rules={[
                   {
                     required: true,
@@ -341,6 +347,7 @@ export default (props: any) => {
               <Form.Item
                 name="confirm"
                 label="确认密码"
+                labelCol={{ span: 3 }}
                 dependencies={['password']}
                 hasFeedback
                 rules={[
@@ -366,12 +373,18 @@ export default (props: any) => {
           {/*编辑*/}
           {editId !== undefined && (
             <>
-              <Form.Item name="password" label="密码" hasFeedback>
+              <Form.Item 
+                name="password" 
+                label="密码" 
+                labelCol={{ span: 3 }}
+                hasFeedback
+              >
                 <Input.Password />
               </Form.Item>
               <Form.Item
                 name="confirm"
                 label="确认密码"
+                labelCol={{ span: 3 }}
                 dependencies={['password']}
                 hasFeedback
                 rules={[
@@ -393,6 +406,7 @@ export default (props: any) => {
           <Form.Item
             name="roles"
             label="角色"
+            labelCol={{ span: 3 }}
             rules={[{ required: true, message: '名称是必填项！' }]}
           >
             <Select mode="multiple" options={roles} placeholder="请选择 角色" />
@@ -410,6 +424,7 @@ export default (props: any) => {
 
             <Form.Item
               label="权限"
+              labelCol={{ span: 3 }}
             >
               <Tree
                 checkable
